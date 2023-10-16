@@ -1,6 +1,6 @@
 {
-  "name": "angular-t9n",
-  "version": "16.0.0",
+  "name": "otus-translation",
+  "version": "16.0.1",
   "description": "A translation tool for Angular i18n",
   "bin": {
     "ng-t9n": "./bin/cli.js"
@@ -29,18 +29,14 @@
     "xi18n:xlf": "ng extract-i18n -c xlf",
     "xi18n:xlf2": "ng extract-i18n",
     "xi18n": "yarn -s xi18n:xlf && yarn -s xi18n:xlf2",
-    "t9n:xlf": "ng run angular-t9n:t9n -c xlf",
-    "t9n:xlf2": "ng run angular-t9n:t9n",
+    "t9n:xlf": "ng run otus-translation:t9n  xlf",
+    "t9n:xlf2": "ng run otus-translation:t9n",
     "release": "standard-version --tag-prefix=\"\""
   },
   "repository": {
-    "type": "git",
-    "url": "git+https://github.com/kyubisation/angular-t9n.git"
+    "type": "git"
   },
   "license": "Apache-2.0",
-  "bugs": {
-    "url": "https://github.com/kyubisation/angular-t9n/issues"
-  },
   "files": [
     "{bin,builders,schematics,server}/**/*.{json,js,d.ts}",
     "server/client/*",
@@ -53,9 +49,11 @@
     "@nestjs/platform-ws": "^9.4.0",
     "@nestjs/serve-static": "^3.0.1",
     "@nestjs/websockets": "^9.4.0",
+    "@types/file-saver": "^2.0.5",
     "@xmldom/xmldom": "^0.8.7",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.13.2",
+    "file-saver": "^2.0.5",
     "js-levenshtein": "^1.1.6",
     "reflect-metadata": "^0.1.13",
     "rxjs": "~7.8.1"
