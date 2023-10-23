@@ -1,7 +1,6 @@
 import { exec } from 'child_process';
 
 import { Injectable } from '@nestjs/common';
-import { Observable } from 'rxjs';
 
 // import { TargetInfo } from '../target-info';
 
@@ -17,8 +16,8 @@ export class GitService {
   //   })
   // }
 
-  commitHandler(): Observable<any> {
-    const observable = new Observable<any>((sub) => {
+  commitHandler(): Promise<any> {
+    const promise = new Promise((resolve, reject) => {
       exec('git add .', (err) => {
         if (!err) {
           const date = new Date();
@@ -32,18 +31,17 @@ export class GitService {
             `git commit -m "localization: localized at ${year}-${month}-${day} ${hour}:${minute}:${second}"`,
             (e) => {
               if (!e) {
-                sub.next();
+                resolve(true);
               }
-              sub.error(err);
+              reject(e);
             }
           );
         } else {
           console.log(err);
-          sub.error(err);
+          reject(err);
         }
-        sub.complete();
       });
     });
-    return observable;
+    return promise;
   }
 }
