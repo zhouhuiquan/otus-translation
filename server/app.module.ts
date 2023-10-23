@@ -17,6 +17,7 @@ import { OrphanRegistry } from './persistence';
 import { Xlf2Serializer, XlfSerializer } from './serialization';
 import { SerializationStrategy } from './serialization-strategy';
 import { GitService } from './services/git.service';
+import { SyncService } from './services/sync.service';
 
 @Module({
   imports: [
@@ -43,6 +44,7 @@ import { GitService } from './services/git.service';
     Xlf2Deserializer,
     XlfSerializer,
     GitService,
+    SyncService,
     Xlf2Serializer,
   ],
 })
