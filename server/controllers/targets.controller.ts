@@ -11,6 +11,7 @@ import { LinkHelper } from '../link-helper';
 import { TargetResponse, TargetsResponse } from '../models';
 import { TranslationTargetRegistry } from '../persistence';
 import { GitService } from '../services/git.service';
+import { firstValueFrom } from 'rxjs';
 
 @Controller('targets')
 export class TargetsController {
@@ -27,14 +28,12 @@ export class TargetsController {
 
   @Get('syncFrom')
   async syncGitFromRepo() {
-    this.git.commitHandler().subscribe({
-      next: () => {
-        return { data: null, message: 'commit success' };
-      },
-      error: () => {
-        return { data: 'has error', message: 'comit failed' };
-      },
-    });
+    const data = await firstValueFrom(this.git.commitHandler());
+    if (data) {
+      return { data: null, message: 'commit success' };
+    } else {
+      return { data: 'has error', message: 'comit failed' };
+    }
   }
 
   @Get(':language')
