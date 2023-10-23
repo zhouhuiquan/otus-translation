@@ -1,6 +1,6 @@
 {
   "name": "otus-localization",
-  "version": "16.0.0",
+  "version": "16.0.1",
   "description": "A translation tool for Angular i18n",
   "bin": {
     "ng-t9n": "./bin/cli.js"
@@ -45,17 +45,19 @@
   "dependencies": {
     "@nestjs/common": "^9.4.0",
     "@nestjs/core": "^9.4.0",
-    "@nestjs/platform-express": "^9.4.0",
+    "@nestjs/platform-express": "^9.4.3",
     "@nestjs/platform-ws": "^9.4.0",
     "@nestjs/serve-static": "^3.0.1",
     "@nestjs/websockets": "^9.4.0",
     "@types/file-saver": "^2.0.5",
+    "@types/multer": "^1.4.9",
     "@xmldom/xmldom": "^0.8.7",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.13.2",
     "commander": "^11.1.0",
     "file-saver": "^2.0.5",
     "js-levenshtein": "^1.1.6",
+    "multer": "^1.4.5-lts.1",
     "reflect-metadata": "^0.1.13",
     "rxjs": "~7.8.1",
     "yargs": "^17.7.2"

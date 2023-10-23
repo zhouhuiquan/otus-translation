@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [16.0.1](https://github.com/kyubisation/angular-t9n/compare/16.0.5...16.0.1) (2023-10-23)
+
 ### [16.0.5](https://github.com/kyubisation/angular-t9n/compare/16.0.4...16.0.5) (2023-10-17)
 
 ### [16.0.4](https://github.com/kyubisation/angular-t9n/compare/16.0.3...16.0.4) (2023-10-17)
