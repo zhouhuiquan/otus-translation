@@ -17,8 +17,8 @@ export class GitService {
   //   })
   // }
 
-  commitHandler(): Observable<boolean> {
-    const observable = new Observable<boolean>((sub) => {
+  commitHandler(): Observable<any> {
+    const observable = new Observable<any>((sub) => {
       exec('git add .', (err) => {
         if (!err) {
           const date = new Date();
@@ -29,17 +29,17 @@ export class GitService {
           const minute = date.getMinutes();
           const second = date.getSeconds();
           exec(
-            `git commit -m "localize: localization at ${year}-${month}-${day} ${hour}:${minute}:${second}"`,
+            `git commit -m "localization: localized at ${year}-${month}-${day} ${hour}:${minute}:${second}"`,
             (e) => {
               if (!e) {
                 sub.next();
               }
-              sub.error();
+              sub.error(err);
             }
           );
         } else {
           console.log(err);
-          sub.error();
+          sub.error(err);
         }
         sub.complete();
       });
