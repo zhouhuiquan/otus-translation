@@ -3,12 +3,15 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { RouterLink } from '@angular/router';
 import { forkJoin, Observable, of } from 'rxjs';
 import { map, switchMap, take } from 'rxjs/operators';
 
 import { TargetResponse } from '../../../models';
+import { CommonService, fileFormats } from '../../core/common.service';
 import { TranslationService } from '../../core/translation.service';
 import { WebsocketService } from '../../core/websocket.service';
 import { AddLanguageModalComponent } from '../add-language-modal/add-language-modal.component';
@@ -28,6 +31,8 @@ import { AddLanguageModalComponent } from '../add-language-modal/add-language-mo
     RouterLink,
     NgFor,
     NgIf,
+    MatFormFieldModule,
+    MatSelectModule,
   ],
 })
 export class OverviewComponent implements OnInit {
@@ -37,10 +42,13 @@ export class OverviewComponent implements OnInit {
   unitCount: Observable<number>;
   targets: Observable<TargetResponse[]>;
 
+  fileFormats = fileFormats;
+
   constructor(
     private _dialog: MatDialog,
     private _translationService: TranslationService,
-    websocketService: WebsocketService
+    websocketService: WebsocketService,
+    public common: CommonService
   ) {
     this.project = websocketService.projectChange.pipe(map((p) => p.project));
     this.sourceFile = websocketService.projectChange.pipe(map((p) => p.sourceFile));
@@ -85,5 +93,9 @@ export class OverviewComponent implements OnInit {
         this.translatedPercentage(target) +
         this.reviewedPercentage(target))
     );
+  }
+
+  fileFormatChangeHandler(value: fileFormats) {
+    this.common.setFileFormat(value);
   }
 }

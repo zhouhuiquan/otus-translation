@@ -35,7 +35,7 @@ export abstract class XlfDeserializerBase extends TranslationDeserializer {
     const match = processingInstruction.data.match(/encoding="([^"]+)"/);
     if (match && match[1].replace(/[ -]+/g, '').toUpperCase() !== 'UTF8') {
       throw new Error(
-        `angular-t9n only supports UTF-8, but encoding ${
+        `otus-translation only supports UTF-8, but encoding ${
           match[1]
         } was detected '${doc.firstChild!.toString()}'`
       );

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
+import { saveAs } from 'file-saver';
 import { Observable, of } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
+import { map, switchMap, take } from 'rxjs/operators';
 
 import { TranslationTargetUnitResponse } from '../../../models';
 
@@ -12,6 +13,7 @@ export class ExportService {
 
   export(config: { state: string }): Observable<void> {
     return this._translationTargetService.target.pipe(
+      take(1),
       switchMap((t) =>
         this._fetchUnits().pipe(
           map((entries) =>
@@ -33,6 +35,48 @@ export class ExportService {
           })
         )
       )
+    );
+  }
+
+  exportJson(config: { state: string }): Observable<any> {
+    return this._translationTargetService.target.pipe(
+      take(1),
+      switchMap((t) => {
+        return this._fetchUnits().pipe(
+          take(1),
+          map((entries) => {
+            if (config.state === '') {
+              return Object.fromEntries(entries.map((item) => [item.id, item.target]));
+            }
+            return Object.fromEntries(
+              entries
+                .filter((item) => item.state === config.state)
+                .map((item) => [item.id, item.target])
+            );
+          }),
+          map((obj: Record<string, string>) => {
+            let ids;
+            try {
+              ids = JSON.parse(localStorage.getItem('ids') || '[]');
+              if (!Array.isArray(ids)) {
+                ids = [];
+              }
+            } catch (error) {
+              ids = [];
+            }
+            const existData = Object.fromEntries(ids.map((item) => [item, obj[item]]));
+            const addedData = Object.fromEntries(
+              Object.entries(obj).filter((item) => !(item[0] in existData))
+            );
+            return { ...existData, ...addedData };
+          }),
+          switchMap((object) => {
+            const blob = new Blob([JSON.stringify(object, null, 2)], {});
+            saveAs(blob, `messages.${t.language}.json`);
+            return Promise.resolve();
+          })
+        );
+      })
     );
   }
 

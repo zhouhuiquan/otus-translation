@@ -30,7 +30,8 @@ import { PatternPersistenceStrategy } from './pattern-persistence-strategy';
 export function init(name: string = 't9n.conf.json') {
   name = name.endsWith('.json') ? name : `${name}.json`;
   const options: Options & { $schema: string } = {
-    $schema: 'https://raw.githubusercontent.com/kyubisation/angular-t9n/master/t9n.schema.json',
+    $schema:
+      'https://raw.githubusercontent.com/kyubisation/otus-translation/master/t9n.schema.json',
     translationFile: 'messages.xlf',
     targetTranslationPath: '',
     includeContextInTarget: false,

@@ -20,7 +20,7 @@ export function ngAdd(_options: Schema): Rule {
       } else {
         projectWorkspace!.targets.add({
           name: 't9n',
-          builder: 'angular-t9n:t9n',
+          builder: 'otus-translation:t9n',
           options: options as any,
         });
       }

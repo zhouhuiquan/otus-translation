@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "angular-t9n": {
+    "otus-translation": {
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
@@ -16,7 +16,7 @@
       "i18n": {
         "sourceLocale": "en",
         "locales": {
-          "de": "src/locale/xlf2/messages.de.xlf"
+          "zh-CN": "src/locale/xlf/messages.zh-CN.xlf"
         }
       },
       "architect": {
@@ -73,21 +73,21 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "angular-t9n:build"
+            "browserTarget": "otus-translation:build"
           },
           "configurations": {
             "de": {
-              "browserTarget": "angular-t9n:build:de"
+              "browserTarget": "otus-translation:build:de"
             },
             "production": {
-              "browserTarget": "angular-t9n:build:production"
+              "browserTarget": "otus-translation:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "angular-t9n:build",
+            "browserTarget": "otus-translation:build",
             "format": "xlf2",
             "outputPath": "src/locale/xlf2"
           },
@@ -116,7 +116,7 @@
         "t9n": {
           "builder": ".:t9n",
           "options": {
-            "translationFile": "src/locale/xlf2/messages.xlf",
+            "translationFile": "src/locale/xlf/messages.xlf",
             "includeContextInTarget": true
           },
           "configurations": {

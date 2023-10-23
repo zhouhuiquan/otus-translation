@@ -1,16 +1,20 @@
 <mat-toolbar color="primary" role="heading">
   <a mat-button routerLink="/">
     <mat-icon>translate</mat-icon>
-    angular-t9n
+    otus-translation
   </a>
-  <a mat-button matTooltip="Dashboard" routerLink="/">
+  <a
+    mat-button
+    matTooltip="Dashboard"
+    [routerLink]="['/' + (common.fileFormat | async | lowercase)]"
+  >
     <mat-icon>home</mat-icon>
   </a>
   <a mat-button matTooltip="Migrate Orphans" routerLink="/orphans">
     <mat-icon>mediation</mat-icon> Orphans
   </a>
   <span class="separator"></span>
-  <a mat-button href="https://github.com/kyubisation/angular-t9n">
+  <a mat-button href="https://github.com/kyubisation/otus-translation">
     <img src="assets/github.svg" alt="GitHub" /> GitHub
   </a>
 </mat-toolbar>

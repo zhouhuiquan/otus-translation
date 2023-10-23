@@ -12,6 +12,15 @@
   <dd>{{ unitCount | async }}</dd>
 </dl>
 
+<h2>Target File Format</h2>
+<mat-form-field>
+  <mat-select [value]="common.fileFormat | async" (valueChange)="fileFormatChangeHandler($event)">
+    <mat-option *ngFor="let item of fileFormats" [value]="item">
+      {{ item }}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+
 <h2>Languages</h2>
 
 <button (click)="openLanguageModal()" type="button" mat-raised-button color="primary" i18n>
@@ -67,24 +76,23 @@
       </div>
     </mat-card-content>
     <mat-card-actions>
-      <a [routerLink]="['/target', target.language]" mat-raised-button color="primary" i18n>Edit</a>
       <a
-        [routerLink]="['/target', target.language, 'export']"
+        [routerLink]="['target', target.language]"
+        [queryParams]="{ state: 'initial' }"
         mat-raised-button
         color="primary"
         i18n
+        >Edit</a
+      >
+      <a [routerLink]="['target', target.language, 'export']" mat-raised-button color="primary" i18n
         >Export</a
       >
-      <a
-        [routerLink]="['/target', target.language, 'import']"
-        mat-raised-button
-        color="primary"
-        i18n
+      <a [routerLink]="['target', target.language, 'import']" mat-raised-button color="primary" i18n
         >Import</a
       >
       <a
         *ngIf="target.orphanCount"
-        [routerLink]="['/target', target.language, 'orphans']"
+        [routerLink]="['target', target.language, 'orphans']"
         mat-raised-button
         color="primary"
         i18n-malTooltip

@@ -8,7 +8,7 @@ import { Component } from '@angular/core';
   imports: [TitleCasePipe],
 })
 export class I18nExamplesTemplateComponent {
-  title = 'angular-t9n';
+  title = 'otus-translation';
   amount = 1;
   minutes = 1;
   gender = 'm';

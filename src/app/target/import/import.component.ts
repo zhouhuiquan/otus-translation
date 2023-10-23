@@ -1,4 +1,4 @@
-import { NgIf, NgFor, AsyncPipe } from '@angular/common';
+import { NgIf, NgFor, AsyncPipe, LowerCasePipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, HostBinding, HostListener } from '@angular/core';
 import { UntypedFormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -9,8 +9,9 @@ import { MatListModule } from '@angular/material/list';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSelectModule } from '@angular/material/select';
 import { RouterLink } from '@angular/router';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, switchMap, take } from 'rxjs';
 
+import { CommonService } from '../../core/common.service';
 import { ImportResult } from '../core/import-result';
 import { ImportService } from '../core/import.service';
 
@@ -34,6 +35,7 @@ import { ImportService } from '../core/import.service';
     MatListModule,
     NgFor,
     AsyncPipe,
+    LowerCasePipe,
   ],
 })
 export class ImportComponent {
@@ -42,7 +44,7 @@ export class ImportComponent {
   importResult = new BehaviorSubject<ImportResult | undefined>(undefined);
   targetState = new UntypedFormControl('translated');
 
-  constructor(private _importService: ImportService) {}
+  constructor(private _importService: ImportService, public common: CommonService) {}
 
   @HostListener('dragover', ['$event']) onDragOver(event: Event) {
     event.preventDefault();
@@ -74,10 +76,23 @@ export class ImportComponent {
   private async _import(files: FileList) {
     this.importResult.next(undefined);
     this.importing.next(true);
-    try {
-      const result = await this._importService.import(files, this.targetState.value);
-      this.importResult.next(result);
-    } catch {}
-    this.importing.next(false);
+    this.common.fileFormat
+      .pipe(
+        take(1),
+        switchMap((fileFormat) => {
+          if (fileFormat === 'Excel') {
+            return this._importService.import(files, this.targetState.value);
+          }
+          return this._importService.importJson(files, this.targetState.value);
+        })
+      )
+      .subscribe({
+        next: (value) => {
+          this.importResult.next(value);
+        },
+        complete: () => {
+          this.importing.next(false);
+        },
+      });
   }
 }

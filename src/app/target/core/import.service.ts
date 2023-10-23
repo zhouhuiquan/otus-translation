@@ -97,4 +97,56 @@ export class ImportService {
         )
       );
   }
+
+  async importJson(files: FileList, state: 'translated' | 'reviewed' | 'final') {
+    const reader = new FileReader();
+    const load = () =>
+      new Promise((resolve) => {
+        reader.addEventListener('loadend', (event) => {
+          if (event.type === 'loadend') {
+            resolve(JSON.parse(`${reader.result as string}`));
+          }
+        });
+      });
+    reader.readAsText(files[0]);
+    const result = new ImportResult();
+
+    const data = (await load()) as Object;
+
+    const importIds: string[] = [];
+
+    const all = Object.entries(data)
+      .map((item) => ({
+        id: item[0],
+        target: item[1],
+      }))
+      .map(async (item) => {
+        try {
+          importIds.push(item.id);
+          const response = (await this._importUnit(item, state).toPromise())!;
+          result.importedUnits.push(response);
+          return Promise.resolve();
+        } catch {
+          return Promise.resolve();
+        }
+      });
+
+    await Promise.all(all);
+
+    let ids;
+
+    try {
+      ids = JSON.parse(localStorage.getItem('ids') || '[]');
+      if (!Array.isArray(ids)) {
+        ids = [];
+      }
+    } catch (error) {
+      ids = [];
+    }
+
+    ids = Array.from(new Set([...ids, ...importIds]));
+    localStorage.setItem('ids', JSON.stringify(ids));
+
+    return result;
+  }
 }

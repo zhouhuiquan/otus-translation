@@ -46,7 +46,7 @@ export async function t9n(options: Options, context: BuilderContext): Promise<Bu
   const sourceFile = join(workspaceRoot, options.translationFile);
   const targetTranslationPath = options.targetTranslationPath || dirname(options.translationFile);
   const targetDirectory = join(workspaceRoot, targetTranslationPath);
-  context.logger.info('angular-t9n');
+  context.logger.info('otus-translation');
   context.logger.info('===========');
   context.logger.info(` - workspace root:   ${workspaceRoot}`);
   context.logger.info(` - source file:      ${sourceFile}`);
@@ -199,7 +199,7 @@ export async function t9n(options: Options, context: BuilderContext): Promise<Bu
         })
       );
 
-      await angularI18n.update();
+      // await angularI18n.update();
       context.logger.info(`Successfully serialized target files`);
       return targetRegistry;
     } catch (e) {

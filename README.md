@@ -1,15 +1,15 @@
-# angular-t9n
+# otus-translation
 
 This project is a tool to manage `.xlf` translation files. It is implemented as an Angular builder and can be added to a project via schematics.
 
-`angular-t9n` allows adding translation targets, editing translations, exporting to Excel, importing from Excel and migrating orphaned translations.
+`otus-translation` allows adding translation targets, editing translations, exporting to Excel, importing from Excel and migrating orphaned translations.
 
 The focus of this project is on Angular specific XLIFF files with UTF-8 encoding.
 
 ## Installation
 
 ```
-ng add angular-t9n
+ng add otus-translation
 ```
 
 This will add a `t9n` section to the architect section of your `angular.json`.
@@ -32,6 +32,6 @@ Run `ng run {projectName}:t9n`, where `{projectName}` is the name of the project
 ### Standalone Usage
 
 This library can also be used without an angular.json.
-Install the package globally via `npm install angular-t9n --global` or `yarn global add angular-t9n`.
+Install the package globally via `npm install otus-translation --global` or `yarn global add otus-translation`.
 
 Create a config file with `ng-t9n init [name-of-config]` and start a translation server with `ng-t9n path/to/config/file.json`.

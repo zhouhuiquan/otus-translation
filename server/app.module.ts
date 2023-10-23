@@ -16,6 +16,7 @@ import { LinkHelper } from './link-helper';
 import { OrphanRegistry } from './persistence';
 import { Xlf2Serializer, XlfSerializer } from './serialization';
 import { SerializationStrategy } from './serialization-strategy';
+import { GitService } from './services/git.service';
 
 @Module({
   imports: [
@@ -41,6 +42,7 @@ import { SerializationStrategy } from './serialization-strategy';
     XlfDeserializer,
     Xlf2Deserializer,
     XlfSerializer,
+    GitService,
     Xlf2Serializer,
   ],
 })

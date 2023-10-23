@@ -49,6 +49,24 @@ export class TranslationTargetRegistry {
     return Array.from(this._targets.values());
   }
 
+  sortWithIds(ids: any[], language: string) {
+    const data = this._targets.get(language)?.unitMap;
+    if (data?.size) {
+      const result: Map<string, TranslationTargetUnit> = new Map();
+      ids.forEach((item) => {
+        result.set(item, data.get(item)!);
+      });
+      if (result.size) {
+        const target = new TranslationTarget(this._source, language, result!);
+        target.changed
+          .pipe(debounceTime(300))
+          .subscribe(() => this._persistenceStrategy.update(target));
+        this._synchronizeSources(target);
+        this._targets.set(language, target);
+      }
+    }
+  }
+
   private _synchronizeSources(target: TranslationTarget) {
     let changeRequired = false;
     for (const unit of target.units) {

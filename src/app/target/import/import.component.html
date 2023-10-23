@@ -1,15 +1,15 @@
-<h2>Import translation units from Excel</h2>
+<h2>Import translation units from {{ common.fileFormat | async }}</h2>
 
 <p>
-  Import all translation units from an Excel file. This is intended to be used with
-  <a routerLink="../export">Export</a>.
+  Import all translation units from an {{ common.fileFormat | async }} file. This is intended to be
+  used with <a routerLink="../export">Export</a>.
 </p>
-<p>
+<p *ngIf="(common.fileFormat | async) === 'Excel'">
   The import expects the columns to be in order of
   <code>Id, Description, Meaning, Source, Target</code>. The first row is skipped, since it is
   assumed to be a header row.
 </p>
-<p>.xlsx files can be dragged and dropped onto this area.</p>
+<p>.{{ common.fileFormat | async | lowercase }} files can be dragged and dropped onto this area.</p>
 
 <mat-form-field>
   <mat-label>Target state</mat-label>
@@ -22,7 +22,15 @@
 </mat-form-field>
 
 <button type="button" mat-raised-button (click)="fileInput.click()">Choose File</button>
-<input #fileInput type="file" multiple accept=".xlsx,.csv" (change)="onInput($event)" />
+<input
+  #fileInput
+  type="file"
+  multiple
+  [accept]="
+    (common.fileFormat | async) === 'Excel' ? '.xlsx,.csv' : '.' + (common.fileFormat | async)
+  "
+  (change)="onInput($event)"
+/>
 
 <mat-spinner *ngIf="importing | async"></mat-spinner>
 

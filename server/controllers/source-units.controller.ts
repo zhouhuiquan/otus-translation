@@ -1,4 +1,4 @@
-import { Controller, Get, NotFoundException, Param, Query } from '@nestjs/common';
+import { Body, Controller, Get, NotFoundException, Param, Post, Query } from '@nestjs/common';
 
 import { LinkHelper } from '../link-helper';
 import {
@@ -45,6 +45,12 @@ export class SourceUnitsController {
     const sourceUnit = new SourceUnitResponse(unit, this._linkHelper);
     sourceUnit._embedded = this._createEmbeddedObject(unit);
     return sourceUnit;
+  }
+
+  @Post(':language')
+  reWriteTargetLanguage(@Param('language') language: string, @Body() body: Array<object>) {
+    this._translationTargetRegistry.sortWithIds(body, language);
+    return { data: null, message: 'success' };
   }
 
   private _createEmbeddedObject(unit: TranslationSourceUnit) {

@@ -150,4 +150,8 @@ export class TranslationTargetService {
       map((t) => ({ orphansRemaining: t.orphanCount > 0 }))
     );
   }
+
+  sort(ids: string[], language: string) {
+    return this._http.post(`//${location.hostname}:4300/api/source/units/${language}`, ids);
+  }
 }

@@ -17,7 +17,7 @@
     },
     "port": {
       "type": "integer",
-      "description": "The port on which to host angular-t9n"
+      "description": "The port on which to host otus-translation"
     }
   },
   "required": ["translationFile"]

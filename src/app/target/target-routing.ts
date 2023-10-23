@@ -2,7 +2,7 @@ import { Routes } from '@angular/router';
 
 export const routes: Routes = [
   {
-    path: 'target/:language',
+    path: ':format/target/:language',
     loadComponent: () => import('./target/target.component').then((m) => m.TargetComponent),
     children: [
       {
