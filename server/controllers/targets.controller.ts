@@ -58,6 +58,7 @@ export class TargetsController {
       console.log(buffer.toJSON());
       res.set({
         'Content-Type': 'application/octet-stream',
+        'Content-Disposition': 'attachment;',
       });
       res.send(buffer);
     } catch (error) {
