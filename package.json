@@ -1,7 +1,7 @@
 {
   "name": "otus-localization",
-  "version": "16.0.14",
-  "description": "A translation tool for Angular i18n",
+  "version": "16.0.15",
+  "description": "A translation tool for Angular i18n(angular-t9n)",
   "bin": {
     "ng-t9n": "./bin/cli.js"
   },
