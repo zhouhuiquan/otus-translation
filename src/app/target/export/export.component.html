@@ -1,5 +1,10 @@
 <h2 i18n>Export translation units to {{ common.fileFormat | async }}</h2>
 
+<button mat-raised-button color="primary" style="margin-right: 16px" (click)="updateHandler()">
+  Auto Update
+</button>
+<button mat-raised-button (click)="commitHandler()">Commit</button>
+
 <p i18n>Export all translation units or filter by translation state.</p>
 
 <form [formGroup]="configuration" (ngSubmit)="export()">
@@ -13,7 +18,7 @@
     </mat-select>
   </mat-form-field>
 
-  <button mat-raised-button color="primary" [disabled]="loading | async" i18n>Export</button>
+  <button mat-raised-button [disabled]="loading | async" i18n>Export</button>
 </form>
 
 <mat-spinner *ngIf="loading | async"></mat-spinner>

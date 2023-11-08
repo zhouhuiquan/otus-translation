@@ -9,11 +9,13 @@ import { MatListModule } from '@angular/material/list';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSelectModule } from '@angular/material/select';
 import { RouterLink } from '@angular/router';
-import { BehaviorSubject, switchMap, take } from 'rxjs';
+import { BehaviorSubject, switchMap, take, tap } from 'rxjs';
 
 import { CommonService } from '../../core/common.service';
 import { ImportResult } from '../core/import-result';
 import { ImportService } from '../core/import.service';
+import { HttpClient } from '@angular/common/http';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 @Component({
   selector: 't9n-import',
@@ -36,6 +38,7 @@ import { ImportService } from '../core/import.service';
     NgFor,
     AsyncPipe,
     LowerCasePipe,
+    MatSnackBarModule,
   ],
 })
 export class ImportComponent {
@@ -44,7 +47,12 @@ export class ImportComponent {
   importResult = new BehaviorSubject<ImportResult | undefined>(undefined);
   targetState = new UntypedFormControl('translated');
 
-  constructor(private _importService: ImportService, public common: CommonService) {}
+  constructor(
+    private _importService: ImportService,
+    public common: CommonService,
+    private http: HttpClient,
+    private snackBar: MatSnackBar
+  ) {}
 
   @HostListener('dragover', ['$event']) onDragOver(event: Event) {
     event.preventDefault();
@@ -92,6 +100,44 @@ export class ImportComponent {
         },
         complete: () => {
           this.importing.next(false);
+        },
+      });
+  }
+
+  loadFile() {
+    this.http
+      .get('http://localhost:4300/api/targets/loadTranslatedFile', { responseType: 'arraybuffer' })
+      .pipe(
+        tap(() => {
+          this.common.loading$.next(true);
+        })
+      )
+      .subscribe({
+        next: (data) => {
+          const fileList = [new File([data], 'target.json')];
+          this._importService
+            .importJson(fileList, 'translated')
+            .then(() => {
+              this.snackBar.open('Load Success', '', {
+                horizontalPosition: 'center',
+                verticalPosition: 'top',
+                duration: 2000,
+              });
+            })
+            .catch(() => {
+              this.snackBar.open('Load Failed', 'ERROR', {
+                horizontalPosition: 'center',
+                verticalPosition: 'top',
+                duration: 3000,
+              });
+            });
+        },
+        error: () => {
+          this.snackBar.open('Load Failed', 'ERROR', {
+            horizontalPosition: 'center',
+            verticalPosition: 'top',
+            duration: 3000,
+          });
         },
       });
   }

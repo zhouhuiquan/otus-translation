@@ -1,8 +1,10 @@
+import { exec } from 'child_process';
+import { readdirSync, readFileSync, writeFileSync } from 'fs';
+import { dirname, join, relative, resolve } from 'path';
+
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { WsAdapter } from '@nestjs/platform-ws';
-import { readdirSync, readFileSync, writeFileSync } from 'fs';
-import { dirname, join, relative, resolve } from 'path';
 
 import {
   AppModule,
@@ -53,6 +55,28 @@ export async function runT9nStandalone(configFile: string) {
   await t9nStandalone(config);
 }
 
+function syncRepoFromGit(branch = 'dev') {
+  return new Promise<void>((resolve, reject) => {
+    exec(`git pull origin ${branch}`, (err) => {
+      if (!err) {
+        resolve();
+      }
+      reject(err);
+    });
+  });
+}
+
+function extractI18n() {
+  return new Promise<void>((resolve, reject) => {
+    exec('npx nx extract-i18n --skip-nx-cache', (err) => {
+      if (!err) {
+        resolve();
+      }
+      reject(err);
+    });
+  });
+}
+
 export async function t9nStandalone(options: Options, currentWorkingDirectory?: string) {
   const host = new AsyncWorkspaceHost();
   const workspaceRoot = resolve(currentWorkingDirectory || process.cwd());
@@ -63,6 +87,13 @@ export async function t9nStandalone(options: Options, currentWorkingDirectory?: 
     throw new Error(`${options.translationFile} does not exist or is not a file!`);
   } else if (!(await host.isDirectory(targetDirectory))) {
     throw new Error(`targetTranslationPath ${targetTranslationPath} is not a valid directory!`);
+  }
+
+  try {
+    await syncRepoFromGit();
+    await extractI18n();
+  } catch (error) {
+    console.log(error);
   }
 
   const xliffVersion = await detectXliffVersion();
@@ -77,7 +108,12 @@ export async function t9nStandalone(options: Options, currentWorkingDirectory?: 
       {
         provide: TargetInfo,
         useFactory: (source: TranslationSource) =>
-          new TargetInfo('-', options.translationFile, source.language),
+          new (TargetInfo as any)(
+            '-',
+            options.translationFile,
+            source.language,
+            (options as any).autoTargetFile
+          ),
         inject: [TranslationSource],
       },
       { provide: SerializationOptions, useValue: options },

@@ -1,6 +1,7 @@
 {
-  "$schema": "https://raw.githubusercontent.com/kyubisation/otus-translation/master/t9n.schema.json",
+  "$schema": "https://raw.githubusercontent.com/kyubisation/angular-t9n/master/t9n.schema.json",
   "translationFile": "src/locale/xlf/messages.xlf",
+  "autoTargetFile": "localization/messages.zh-CN.json",
   "targetTranslationPath": "",
   "includeContextInTarget": true,
   "port": 4300

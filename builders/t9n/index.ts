@@ -1,10 +1,12 @@
+import { exec } from 'child_process';
+import { dirname } from 'path';
+
 import { BuilderContext, BuilderOutput, createBuilder } from '@angular-devkit/architect';
 import { join, json, logging, normalize, relative, workspaces } from '@angular-devkit/core';
 import { NodeJsSyncHost } from '@angular-devkit/core/node';
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { WsAdapter } from '@nestjs/platform-ws';
-import { dirname } from 'path';
 
 import {
   AppModule,
@@ -35,6 +37,28 @@ export { Schema as t9nOptions } from './schema';
 
 export default createBuilder<Options & json.JsonObject, BuilderOutput>(t9n);
 
+function syncRepoFromGit(branch = 'dev') {
+  return new Promise<void>((resolve, reject) => {
+    exec(`git pull origin ${branch}`, (err) => {
+      if (!err) {
+        resolve();
+      }
+      reject(err);
+    });
+  });
+}
+
+function extractI18n() {
+  return new Promise<void>((resolve, reject) => {
+    exec('npx nx extract-i18n --skip-nx-cache', (err) => {
+      if (!err) {
+        resolve();
+      }
+      reject(err);
+    });
+  });
+}
+
 export async function t9n(options: Options, context: BuilderContext): Promise<BuilderOutput> {
   if (!context.target) {
     throw new Error('To run this builder context.target is required!');
@@ -44,6 +68,9 @@ export async function t9n(options: Options, context: BuilderContext): Promise<Bu
   const host = workspaces.createWorkspaceHost(nodeHost);
   const workspaceRoot = normalize(context.workspaceRoot);
   const sourceFile = join(workspaceRoot, options.translationFile);
+  const autoTargetFile: string = (options as any).autoTargetFile
+    ? join(workspaceRoot, (options as any).autoTargetFile)
+    : '';
   const targetTranslationPath = options.targetTranslationPath || dirname(options.translationFile);
   const targetDirectory = join(workspaceRoot, targetTranslationPath);
   context.logger.info('otus-translation');
@@ -60,6 +87,13 @@ export async function t9n(options: Options, context: BuilderContext): Promise<Bu
       success: false,
       error: `targetTranslationPath ${targetTranslationPath} is not a valid directory!`,
     };
+  }
+
+  try {
+    await syncRepoFromGit();
+    await extractI18n();
+  } catch (error) {
+    console.log(error);
   }
 
   const xliffVersion = await detectXliffVersion();
@@ -85,10 +119,11 @@ export async function t9n(options: Options, context: BuilderContext): Promise<Bu
       { provide: WorkspaceHost, useValue: host },
       {
         provide: TargetInfo,
-        useValue: new TargetInfo(
+        useValue: new (TargetInfo as any)(
           context.target.project,
           options.translationFile,
-          sourceLocale.code
+          sourceLocale.code,
+          autoTargetFile
         ),
       },
       { provide: SerializationOptions, useValue: options },

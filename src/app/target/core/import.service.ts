@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { switchMap } from 'rxjs/operators';
+import { CommonService } from 'src/app/core/common.service';
 
 import { TranslationTargetUnitResponse } from '../../../models';
 
@@ -8,7 +9,10 @@ import { TranslationTargetService } from './translation-target.service';
 
 @Injectable()
 export class ImportService {
-  constructor(private _translationTargetService: TranslationTargetService) {}
+  constructor(
+    private _translationTargetService: TranslationTargetService,
+    private common: CommonService
+  ) {}
 
   async import(files: FileList, state: 'translated' | 'reviewed' | 'final') {
     const { read, utils } = await import('xlsx');
@@ -98,7 +102,7 @@ export class ImportService {
       );
   }
 
-  async importJson(files: FileList, state: 'translated' | 'reviewed' | 'final') {
+  async importJson(files: FileList | File[], state: 'translated' | 'reviewed' | 'final') {
     const reader = new FileReader();
     const load = () =>
       new Promise((resolve) => {
@@ -146,7 +150,7 @@ export class ImportService {
 
     ids = Array.from(new Set([...ids, ...importIds]));
     localStorage.setItem('ids', JSON.stringify(ids));
-
+    this.common.loading$.next(false);
     return result;
   }
 }

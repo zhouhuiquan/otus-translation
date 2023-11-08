@@ -18,6 +18,13 @@
       "description": "The file path to the root translation file.",
       "x-prompt": "Path to the root translation file?"
     },
+    "autoTargetFile": {
+      "type": "string",
+      "format": "path",
+      "default": "",
+      "description": "Auto File",
+      "x-prompt": "Path to Auto File"
+    },
     "targetTranslationPath": {
       "type": "string",
       "format": "path",

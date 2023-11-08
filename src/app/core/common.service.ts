@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
-import { ReplaySubject, filter } from 'rxjs';
+import { BehaviorSubject, ReplaySubject, filter } from 'rxjs';
 
 export const fileFormats = ['Excel', 'Json'] as const;
 export type fileFormats = (typeof fileFormats)[number];
@@ -10,6 +10,8 @@ export type fileFormats = (typeof fileFormats)[number];
 })
 export class CommonService {
   fileFormat = new ReplaySubject<fileFormats>(1);
+
+  loading$ = new BehaviorSubject(false);
 
   constructor(private router: Router) {
     this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe(() => {

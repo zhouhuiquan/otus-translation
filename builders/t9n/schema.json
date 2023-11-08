@@ -12,6 +12,10 @@
       "type": "string",
       "description": "The path to the target translation files."
     },
+    "autoTargetFile": {
+      "type": "string",
+      "description": "Auto File"
+    },
     "includeContextInTarget": {
       "type": "boolean",
       "default": false,

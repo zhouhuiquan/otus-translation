@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, HostBinding } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import {
   MatSnackBar,
   MatSnackBarModule,
@@ -30,6 +31,7 @@ import { WebsocketService } from './core/websocket.service';
     MatSnackBarModule,
     MatTooltipModule,
     RouterOutlet,
+    MatProgressSpinnerModule,
   ],
 })
 export class AppComponent {

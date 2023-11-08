@@ -1,5 +1,8 @@
 <h2>Import translation units from {{ common.fileFormat | async }}</h2>
 
+<button type="button" mat-raised-button (click)="loadFile()">Auto Load File</button>
+
+<br />
 <p>
   Import all translation units from an {{ common.fileFormat | async }} file. This is intended to be
   used with <a routerLink="../export">Export</a>.
@@ -20,7 +23,6 @@
   </mat-select>
   <mat-hint>The imported units will be assigned to this state</mat-hint>
 </mat-form-field>
-
 <button type="button" mat-raised-button (click)="fileInput.click()">Choose File</button>
 <input
   #fileInput

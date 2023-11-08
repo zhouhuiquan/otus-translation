@@ -10,9 +10,9 @@
   >
     <mat-icon>home</mat-icon>
   </a>
-  <a mat-button matTooltip="Migrate Orphans" routerLink="/orphans">
+  <!-- <a mat-button matTooltip="Migrate Orphans" routerLink="/orphans">
     <mat-icon>mediation</mat-icon> Orphans
-  </a>
+  </a> -->
   <span class="separator"></span>
   <a mat-button href="https://github.com/kyubisation/otus-translation">
     <img src="assets/github.svg" alt="GitHub" /> GitHub
@@ -22,3 +22,7 @@
 <main>
   <router-outlet></router-outlet>
 </main>
+
+<div class="loading-layer" *ngIf="common.loading$ | async">
+  <mat-spinner></mat-spinner>
+</div>

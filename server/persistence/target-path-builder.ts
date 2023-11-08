@@ -19,4 +19,8 @@ export class TargetPathBuilder {
     const language = typeof target === 'string' ? target : target.language;
     return join(this._targetDirectory, `${this._basename}.${language}${this._extension}`);
   }
+
+  getTargetDirectory() {
+    return this._targetDirectory;
+  }
 }

@@ -1,7 +1,8 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { saveAs } from 'file-saver';
 import { Observable, of } from 'rxjs';
-import { map, switchMap, take } from 'rxjs/operators';
+import { catchError, map, switchMap, take } from 'rxjs/operators';
 
 import { TranslationTargetUnitResponse } from '../../../models';
 
@@ -9,7 +10,10 @@ import { TranslationTargetService } from './translation-target.service';
 
 @Injectable()
 export class ExportService {
-  constructor(private _translationTargetService: TranslationTargetService) {}
+  constructor(
+    private _translationTargetService: TranslationTargetService,
+    private http: HttpClient
+  ) {}
 
   export(config: { state: string }): Observable<void> {
     return this._translationTargetService.target.pipe(
@@ -76,6 +80,49 @@ export class ExportService {
             return Promise.resolve();
           })
         );
+      })
+    );
+  }
+
+  exportJsonFile() {
+    return this._translationTargetService.target.pipe(
+      take(1),
+      switchMap(() => {
+        return this._fetchUnits().pipe(
+          take(1),
+          map((entries) => {
+            return Object.fromEntries(
+              entries
+                .filter((item) => item.state === 'translated')
+                .map((item) => [item.id, item.target])
+            );
+          }),
+          map((obj: Record<string, string>) => {
+            let ids;
+            try {
+              ids = JSON.parse(localStorage.getItem('ids') || '[]');
+              if (!Array.isArray(ids)) {
+                ids = [];
+              }
+            } catch (error) {
+              ids = [];
+            }
+            const existData = Object.fromEntries(ids.map((item) => [item, obj[item]]));
+            const addedData = Object.fromEntries(
+              Object.entries(obj).filter((item) => !(item[0] in existData))
+            );
+            return { ...existData, ...addedData };
+          }),
+          switchMap((object) => {
+            const blob = new Blob([JSON.stringify(object, null, 2)], {});
+            const form = new FormData();
+            form.append('file', blob);
+            return this.http.post('http://localhost:4300/api/targets/saveTranslatedFile', form, {});
+          })
+        );
+      }),
+      catchError((err) => {
+        throw err;
       })
     );
   }
