@@ -1,9 +1,10 @@
 <h2 i18n>Export translation units to {{ common.fileFormat | async }}</h2>
 
 <button mat-raised-button color="primary" style="margin-right: 16px" (click)="updateHandler()">
-  Auto Update
+  Auto Update(更新文件)
 </button>
-<button mat-raised-button (click)="commitHandler()">Commit</button>
+<button mat-raised-button style="margin-right: 16px" (click)="commitHandler()">Commit(提交)</button>
+<button mat-raised-button (click)="syncHandler()">Sync(将提交同步到台式机)</button>
 
 <p i18n>Export all translation units or filter by translation state.</p>
 

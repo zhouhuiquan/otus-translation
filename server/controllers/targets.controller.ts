@@ -45,6 +45,20 @@ export class TargetsController {
     }
   }
 
+  @Get('syncLocalization')
+  async syncLocalization() {
+    try {
+      await this.git.syncLocalizationToDesktop();
+      return { data: null, code: 0 };
+    } catch (error) {
+      return {
+        data: null,
+        error,
+        code: 1,
+      };
+    }
+  }
+
   @Get('extractI18n')
   async extracti18n() {
     try {

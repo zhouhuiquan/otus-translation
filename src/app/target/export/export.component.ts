@@ -109,7 +109,7 @@ export class ExportComponent implements OnDestroy {
     this.http.get('/api/targets/gitCommit').subscribe({
       next: (res: any) => {
         if (!res.code) {
-          this.snackBar.open('Commit Success', '', {
+          this.snackBar.open('提交成功', '', {
             horizontalPosition: 'center',
             verticalPosition: 'top',
             duration: 2000,
@@ -125,6 +125,39 @@ export class ExportComponent implements OnDestroy {
       error: (error) => {
         console.log(error);
         this.snackBar.open('Commit Failed', 'ERROR', {
+          horizontalPosition: 'center',
+          verticalPosition: 'top',
+          duration: 3000,
+        });
+        this.common.loading$.next(false);
+      },
+      complete: () => {
+        this.common.loading$.next(false);
+      },
+    });
+  }
+
+  syncHandler() {
+    this.common.loading$.next(true);
+    this.http.get('/api/targets/syncLocalization').subscribe({
+      next: (res: any) => {
+        if (!res.code) {
+          this.snackBar.open('同步成功', '', {
+            horizontalPosition: 'center',
+            verticalPosition: 'top',
+            duration: 2000,
+          });
+        } else {
+          this.snackBar.open('Sync Failed', 'ERROR', {
+            horizontalPosition: 'center',
+            verticalPosition: 'top',
+            duration: 3000,
+          });
+        }
+      },
+      error: (error) => {
+        console.log(error);
+        this.snackBar.open('Sync Failed', 'ERROR', {
           horizontalPosition: 'center',
           verticalPosition: 'top',
           duration: 3000,
