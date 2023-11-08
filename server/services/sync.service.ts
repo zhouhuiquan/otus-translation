@@ -9,10 +9,7 @@ import { TargetInfo } from '../target-info';
 
 @Injectable()
 export class SyncService {
-  constructor(
-    private targetInfo: TargetInfo,
-    private readonly _targetPathBuilder: TargetPathBuilder
-  ) {}
+  constructor(private targetInfo: TargetInfo, private _targetPathBuilder: TargetPathBuilder) {}
 
   extractI18n(): Promise<void> {
     return new Promise((resolve, reject) => {
@@ -25,9 +22,9 @@ export class SyncService {
     });
   }
 
-  loadTranslatedFile(): Promise<Buffer> {
+  loadTranslatedFile(): Promise<void> {
     return readFile(this.targetInfo.autoTargetFile!).then((buffer) => {
-      let data = [];
+      let data: any = [];
       try {
         data = JSON.parse(buffer.toString('utf-8'));
         data = Object.keys(data);
@@ -35,12 +32,11 @@ export class SyncService {
           data = [];
         }
       } catch (error) {}
-      return this.saveSortedId(data).then(() => buffer);
+      return this.saveSortedId(data);
     });
   }
 
   saveTranslatedFile(file: any): Promise<void> {
-    console.log(this.targetInfo.autoTargetFile);
     return writeFile(this.targetInfo.autoTargetFile!, new Uint8Array(file.buffer), {
       encoding: 'utf-8',
     });
@@ -54,7 +50,7 @@ export class SyncService {
     const path = join(this._targetPathBuilder.getTargetDirectory(), 'sorted.json');
     return readFile(path, { encoding: 'utf-8' })
       .catch(() => {
-        return '';
+        return '[]';
       })
       .then((dataString) => {
         let list: string[] = [];

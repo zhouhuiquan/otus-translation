@@ -88,12 +88,6 @@ export class TargetsController {
     return await this.sync.getSortedId();
   }
 
-  // @Post('sortedId')
-  // @UseInterceptors(FileInterceptor('file'))
-  // async saveSortedId(@UploadedFile() file: any) {
-  //   await this.sync.saveSortedId(["111", "mingyue"])
-  // }
-
   @Get('restart')
   async restart() {
     this.sync.restart();

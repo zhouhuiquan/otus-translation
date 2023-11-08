@@ -106,7 +106,7 @@ export class ImportComponent {
 
   loadFile() {
     this.http
-      .get('http://localhost:4300/api/targets/loadTranslatedFile', { responseType: 'arraybuffer' })
+      .get('/api/targets/loadTranslatedFile', { responseType: 'arraybuffer' })
       .pipe(
         tap(() => {
           this.common.loading$.next(true);

@@ -117,7 +117,7 @@ export class ExportService {
             const blob = new Blob([JSON.stringify(object, null, 2)], {});
             const form = new FormData();
             form.append('file', blob);
-            return this.http.post('http://localhost:4300/api/targets/saveTranslatedFile', form, {});
+            return this.http.post('/api/targets/saveTranslatedFile', form, {});
           })
         );
       }),

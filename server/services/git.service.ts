@@ -32,19 +32,21 @@ export class GitService {
       .then(() => {
         return exec('git diff --cached --name-only');
       })
-      .then((filsList) => {
-        if (filsList) {
-          return Promise.reject('文件已经存在');
+      .then((out) => {
+        if (out.stderr) {
+          return Promise.reject('没有新翻译字段');
         }
         return exec(`git commit -m "localization: localized at ${dateString}" --no-verify`);
       })
       .then(() => {
         const commitDateString = `${year}-${month}-${day}_${hour}-${minute}-${second}`;
-        return exec(`git push origin HEAD:localization/${commitDateString}`);
+        return exec(`git push origin HEAD:localization/${commitDateString}`).then(
+          (out) => out.stderr
+        );
       })
       .catch((err) => {
-        if (err === '文件已经存在') {
-          return;
+        if (err === '没有新翻译字段') {
+          return '';
         }
         return Promise.reject(err);
       });

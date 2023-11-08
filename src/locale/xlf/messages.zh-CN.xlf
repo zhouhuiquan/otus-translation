@@ -6416,7 +6416,7 @@
       </trans-unit>
       <trans-unit id="76b6fc8ea39fa73ce9d6e915881a48bfec7bb632" datatype="html">
         <source>Problem Solving &amp; Modeling/Data Analytics</source>
-        <target state="translated">问题解决& 建模/数据分析</target>
+        <target state="translated">问题解决&amp; 建模/数据分析</target>
         <note priority="1" from="description">Table header for Problem Solving & Modeling/Data Analytics</note>
         <note priority="1" from="meaning">analytics/AnalyticsSBACComponent</note>
       </trans-unit>
@@ -6621,7 +6621,7 @@
       </trans-unit>
       <trans-unit id="cf30bbe8cf34e1cdcf3d19d750a4023d11e4ee5b" datatype="html">
         <source>Problem Solving &amp; Data Modeling/Data Analytics</source>
-        <target state="translated">问题解决&数据建模/数据分析</target>
+        <target state="translated">问题解决&amp;数据建模/数据分析</target>
         <note priority="1" from="description">Table column for problem solving & data modeling/data analytics</note>
         <note priority="1" from="meaning">analytics/SbacStudentBreakdownModal</note>
       </trans-unit>
@@ -7812,7 +7812,7 @@
       </trans-unit>
       <trans-unit id="deb27c92e1867cd21b8bc9690faac7f69458d740" datatype="html">
         <source> # Correct </source>
-        <target state="new"></target>
+        <target state="translated">正确率</target>
         <note priority="1" from="description">number of correct responses to question</note>
         <note priority="1" from="meaning">column label</note>
       </trans-unit>
