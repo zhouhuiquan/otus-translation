@@ -114,7 +114,7 @@ export class ExportService {
             return { ...existData, ...addedData };
           }),
           switchMap((object) => {
-            const blob = new Blob([JSON.stringify(object, null, 2)], {});
+            const blob = new Blob([JSON.stringify(object, null, 4)], {});
             const form = new FormData();
             form.append('file', blob);
             return this.http.post('/api/targets/saveTranslatedFile', form, {});

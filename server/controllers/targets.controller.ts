@@ -37,11 +37,11 @@ export class TargetsController {
     try {
       const data = await this.git.commitHandler();
       if (!data) {
-        return { data: null, message: 'commit success', code: 0 };
+        return { data: null, message: 'Commited Success', code: 0 };
       }
-      return { data: data, message: 'Commit Failed', code: 1 };
+      return { error: data, message: 'Commit Failed', code: 1 };
     } catch (error) {
-      return { data: error, message: 'commit failed', code: 1 };
+      return { error: error, message: 'Commit Failed', code: 1 };
     }
   }
 

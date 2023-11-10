@@ -33,16 +33,19 @@ export class GitService {
         return exec('git diff --cached --name-only');
       })
       .then((out) => {
-        if (out.stderr) {
+        if (!out.stdout) {
           return Promise.reject('没有新翻译字段');
         }
         return exec(`git commit -m "localization: localized at ${dateString}" --no-verify`);
       })
       .then(() => {
         const commitDateString = `${year}-${month}-${day}_${hour}-${minute}-${second}`;
-        return exec(`git push origin HEAD:localization/${commitDateString}`).then(
-          (out) => out.stderr
-        );
+        return exec(`git push origin HEAD:localization/${commitDateString}`).then((out) => {
+          if (!(out as any).code) {
+            return Promise.resolve();
+          }
+          return Promise.reject('推送远端失败!');
+        });
       })
       .catch((err) => {
         if (err === '没有新翻译字段') {
